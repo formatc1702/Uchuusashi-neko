@@ -1,0 +1,26 @@
+    #x = buf[0] << 8 | buf[1]
+    #y = buf[2] << 8 | buf[3]
+    #z = buf[4] << 8 | buf[5]
+    
+    #x = int.from_bytes(bytes([buf[1],buf[0]]))
+    #y = int.from_bytes(bytes([buf[3],buf[2]]))
+    #z = int.from_bytes(bytes([buf[5],buf[4]]))
+
+    x = ustruct.unpack("<h",bytes([buf[0],buf[1]]))[0]
+    y = ustruct.unpack("<h",bytes([buf[2],buf[3]]))[0]
+    z = ustruct.unpack("<h",bytes([buf[4],buf[5]]))[0]
+
+
+
+    if ( & mag_rdy):  
+        i2c.writeto(mag_addr, bytes(mag_data))
+        buf = i2c.readfrom(mag_addr, 6)
+        i2c.stop()
+        print(buf)
+        x = ustruct.unpack("<h",bytes([buf[1],buf[0]]))[0]
+        z = ustruct.unpack("<h",bytes([buf[3],buf[2]]))[0]
+        y = ustruct.unpack("<h",bytes([buf[5],buf[4]]))[0]
+        return x,y,z
+    else:
+        print("not ready")
+        return 0,0,0
