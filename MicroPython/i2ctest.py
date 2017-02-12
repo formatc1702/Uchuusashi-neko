@@ -27,9 +27,9 @@ mag_rdy = 0x01
 def mag_raw():
     buf = i2c.readfrom_mem(mag_addr, mag_data, 6)
     print(buf)
-    x = ustruct.unpack("<h",bytes([buf[1],buf[0]]))[0]
-    z = ustruct.unpack("<h",bytes([buf[3],buf[2]]))[0]
-    y = ustruct.unpack("<h",bytes([buf[5],buf[4]]))[0]
+    x = ustruct.unpack("<h",bytes([buf[0],buf[1]]))[0]
+    z = ustruct.unpack("<h",bytes([buf[2],buf[3]]))[0]
+    y = ustruct.unpack("<h",bytes([buf[4],buf[5]]))[0]
     return x,y,z
 
 def mag_heading():
