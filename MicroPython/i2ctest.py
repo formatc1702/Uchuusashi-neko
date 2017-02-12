@@ -9,24 +9,20 @@ i2c = I2C(scl=pin_scl, sda=pin_sda, freq=100000)
 
 # I2C address
 mag_addr = 0x1E
-
 # register addresses
 mag_cra    = 0x00
 mag_crb    = 0x01
 mag_mode   = 0x02
 mag_data   = 0x03
 mag_status = 0x09
-
 # modes
 mag_cont   = 0x00
 mag_single = 0x01
 mag_idle   = 0x03
 
-mag_rdy = 0x01
-
 def mag_raw():
     buf = i2c.readfrom_mem(mag_addr, mag_data, 6)
-    print(buf)
+    #print(buf)
     x = ustruct.unpack("<h",bytes([buf[0],buf[1]]))[0]
     z = ustruct.unpack("<h",bytes([buf[2],buf[3]]))[0]
     y = ustruct.unpack("<h",bytes([buf[4],buf[5]]))[0]
@@ -49,5 +45,7 @@ i2c.writeto_mem(mag_addr, mag_mode, bytes([mag_cont]))
 readregs()
 
 while (True):
+    _x,_y,_z = mag_raw()
+    print(_x,'\t',_y,'\t',_z)
     print(mag_heading())
     time.sleep_ms(67)

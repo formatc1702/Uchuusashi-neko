@@ -24,3 +24,22 @@
     else:
         print("not ready")
         return 0,0,0
+
+
+
+
+
+while(1):
+    dostep(1,250)
+    step_off()
+    time.sleep(1)
+    heading = mag_heading()
+    print(heading)
+    time.sleep(1)
+    
+    dostep(-1,250)
+    step_off()
+    time.sleep(1)
+    heading = mag_heading()
+    print(heading)
+    time.sleep(1)

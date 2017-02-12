@@ -29,7 +29,7 @@ pin_dir.init(Pin.OUT)
 pin_step.init(Pin.OUT)
 
 pin_led.high()
-pin_en.low()
+pin_en.high()  # stepper OFF
 pin_dir.low()
 
 dir = 0
@@ -39,7 +39,7 @@ dir = 0
 # GY-80 IMU
 
 while(1):
-    print("spin!")
+    print("wave!")
     if dir == 1:
         pin_dir.high()
     else:
@@ -51,6 +51,7 @@ while(1):
         srv_us(2000)
         time.sleep_ms(250)
     time.sleep_ms(500)
+    print("spin!")
     pin_en.low()
     for i in range(0,500):        
         pin_led.low()
