@@ -5,13 +5,18 @@ import time
 
 def srv_us(us):
     srv.duty(us*1024*50//1000000)
+    
+def twos_comp(MSB, LSB):
+    comp = MSB * 256 + LSB
+    comp = comp - 65536 if comp > 32767 else comp
+    return comp
 
 def mag_raw():
     buf = i2c.readfrom_mem(mag_addr, mag_data, 6)
 #    print(buf)
-    x = ustruct.unpack("<h",bytes([buf[0],buf[1]]))[0]
-    z = ustruct.unpack("<h",bytes([buf[2],buf[3]]))[0]
-    y = ustruct.unpack("<h",bytes([buf[4],buf[5]]))[0]
+    x = twos_comp(buf[0],buf[1])
+    z = twos_comp(buf[2],buf[3])
+    y = twos_comp(buf[4],buf[5])
     return x,y,z
 
 def mag_heading():
