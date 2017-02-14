@@ -20,13 +20,19 @@ mag_cont   = 0x00
 mag_single = 0x01
 mag_idle   = 0x03
 
+def twos_comp(MSB, LSB):
+    comp = MSB * 256 + LSB
+    comp = comp - 65536 if comp > 32767 else comp
+    return comp
+
 def mag_raw():
     buf = i2c.readfrom_mem(mag_addr, mag_data, 6)
-    #print(buf)
-    x = ustruct.unpack("<h",bytes([buf[0],buf[1]]))[0]
-    z = ustruct.unpack("<h",bytes([buf[2],buf[3]]))[0]
-    y = ustruct.unpack("<h",bytes([buf[4],buf[5]]))[0]
+#    print(buf)
+    x = twos_comp(buf[0],buf[1])
+    z = twos_comp(buf[2],buf[3])
+    y = twos_comp(buf[4],buf[5])
     return x,y,z
+
 
 def mag_heading():
     raw = mag_raw()
@@ -46,6 +52,6 @@ readregs()
 
 while (True):
     _x,_y,_z = mag_raw()
-    print(_x,'\t',_y,'\t',_z)
+    # print(_x,'\t',_y,'\t',_z)
     print(mag_heading())
     time.sleep_ms(67)

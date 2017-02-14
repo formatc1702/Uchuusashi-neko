@@ -25,7 +25,7 @@ def mag_heading():
     return heading
 
 def step_on():
-    pin_en.low()
+    #pin_en.low()
     print("ON")
     
 
@@ -49,6 +49,12 @@ def dostep(dir,numsteps):
         time.sleep_us(100)
     pin_en.high()
     print("STOP")
+
+def turndeg(dir,degs):
+    microstep = 16
+    degs_per_step = 1.8
+    numsteps = degs * microstep / degs_per_step
+    dostep(dir,numsteps)
 
 print("Hello!")
 
@@ -104,10 +110,10 @@ while(1):
     if abs(heading) > 5:
         if heading < 0:
             print("neg")
-            dostep(1,10)
+            turndeg(-1,abs(heading))
         else:
             print("pos")
-            dostep(-1,10)
+            turndeg(1,abs(heading))
         step_off()
         time.sleep(1)
     else:
