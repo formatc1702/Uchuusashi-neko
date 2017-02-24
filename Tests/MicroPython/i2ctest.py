@@ -23,6 +23,9 @@ mag_idle   = 0x03
 def twos_comp(MSB, LSB):
     comp = MSB * 256 + LSB
     comp = comp - 65536 if comp > 32767 else comp
+    if comp == -4096:
+        print("ERR -4096")
+    comp *= 0.92
     return comp
 
 def mag_raw():
@@ -35,8 +38,9 @@ def mag_raw():
 
 
 def mag_heading():
-    raw = mag_raw()
-    heading = 180.0 * atan2(raw[1],raw[0]) / pi
+    x,y,z = mag_raw()
+    print(x,y)
+    heading = atan2(y,x) * 180.0 / pi
     return heading
 
 def readregs():
@@ -51,7 +55,5 @@ i2c.writeto_mem(mag_addr, mag_mode, bytes([mag_cont]))
 readregs()
 
 while (True):
-    _x,_y,_z = mag_raw()
-    # print(_x,'\t',_y,'\t',_z)
     print(mag_heading())
     time.sleep_ms(67)

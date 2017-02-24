@@ -1,0 +1,6 @@
+open tty.usbserial-A9QHHV7Z
+put ../boot.py
+put ../hmc5883l.py
+put ../stepper.py
+ls
+repl
