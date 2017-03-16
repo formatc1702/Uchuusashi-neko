@@ -1,24 +1,42 @@
 import ephem
 import datetime
 import urllib.request
+from math import degrees
 
 
 def get_alt_az_from_tle(tle, loc_str):
     loc = ephem.city(loc_str)
-    obj = calc_obj_from_tle(tle, loc)
+    obj = calc_obj_from_tle(tle, loc, datetime.datetime.utcnow())
     return obj.alt, obj.az
 
-def get_next_pass_from_tle(tle, loc_str):
-    loc = ephem.city(loc_str)
-    obj = calc_obj_from_tle(tle, loc)
-    rise_time, rise_az, max_time, max_alt, set_time, set_az = loc.next_pass(obj)
-    rise_time = rise_time.datetime().replace(microsecond=0)
-    max_time  = max_time.datetime().replace(microsecond=0)
-    set_time  = set_time.datetime().replace(microsecond=0)
-    return rise_time, rise_az, max_time, max_alt, set_time, set_az
+def get_next_pass_from_tle(tle, loc_str, force_vis = False):
+    date = datetime.datetime.utcnow()
+    while True:
+        loc = ephem.city(loc_str)
+        obj = calc_obj_from_tle(tle, loc, date)
+        rise_time, rise_az, max_time, max_alt, set_time, set_az = loc.next_pass(obj)
+        rise_time = rise_time.datetime().replace(microsecond=0)
+        max_time  = max_time.datetime().replace(microsecond=0)
+        set_time  = set_time.datetime().replace(microsecond=0)
 
-def calc_obj_from_tle(tle, loc):
-    loc.date = datetime.datetime.utcnow()
+        # visibility
+        # from http://space.stackexchange.com/questions/4339/calculating-which-satellite-passes-are-visible
+        sun = ephem.Sun()
+        sun.compute(loc)
+        sun_alt = degrees(sun.alt)
+        if obj.eclipsed is False :
+            visible = True
+        else:
+            visible = False
+        print(date, visible)
+        date = set_time + datetime.timedelta(0,3600) # iterate until visible
+
+        if visible == True or force_vis == False:
+            break
+    return rise_time, rise_az, max_time, max_alt, set_time, set_az, visible
+
+def calc_obj_from_tle(tle, loc, date):
+    loc.date = date
     obj = ephem.readtle(tle[0], tle[1], tle[2])
     obj.compute(loc)
     return obj
