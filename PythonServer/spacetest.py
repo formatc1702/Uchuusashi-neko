@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import spacestuff
 from math import degrees
+import datetime
 
 loc      = 'Berlin'
 tle_src  = 'https://www.celestrak.com/NORAD/elements/stations.txt'
@@ -31,6 +32,11 @@ print('')
 print('Next pass over {}:'.format(loc))
 
 rise_time, rise_az, max_time, max_alt, set_time, set_az, visible = spacestuff.get_next_pass_from_tle(tle, loc)
+
+rise_time = rise_time + datetime.timedelta(0,3600)
+max_time  = max_time  + datetime.timedelta(0,3600)
+set_time  = set_time  + datetime.timedelta(0,3600)
+
 
 rise_az = round(degrees(rise_az), 2)
 max_alt = round(degrees(max_alt), 2)

@@ -11,6 +11,9 @@ def get_alt_az_from_tle(tle, loc_str):
 
 def get_next_pass_from_tle(tle, loc_str, force_vis = False):
     date = datetime.datetime.utcnow()
+    # date = date + datetime.timedelta(30,0)
+    counter = 0
+    print(date)
     while True:
         loc = ephem.city(loc_str)
         obj = calc_obj_from_tle(tle, loc, date)
@@ -18,21 +21,31 @@ def get_next_pass_from_tle(tle, loc_str, force_vis = False):
         rise_time = rise_time.datetime().replace(microsecond=0)
         max_time  = max_time.datetime().replace(microsecond=0)
         set_time  = set_time.datetime().replace(microsecond=0)
-
         # visibility
         # from http://space.stackexchange.com/questions/4339/calculating-which-satellite-passes-are-visible
         sun = ephem.Sun()
+        loc.date = max_time
         sun.compute(loc)
-        sun_alt = degrees(sun.alt)
-        if obj.eclipsed is False :
+        sun_alt = round(degrees(sun.alt),1)
+        if obj.eclipsed is False and sun_alt < -6: #-18 < sun_alt < -6 :
             visible = True
+            status = 'visible'
         else:
+            if sun_alt > -6:
+                status = 'day'
+            elif sun_alt < -18:
+                status = 'night'
+            else:
+                status = 'eclipsed'
             visible = False
-        print(date, visible)
-        date = set_time + datetime.timedelta(0,3600) # iterate until visible
 
-        if visible == True or force_vis == False:
+        date = set_time + datetime.timedelta(0,3600) # iterate until visible
+        if degrees(max_alt) > 10.0:
+            print(max_time+datetime.timedelta(0,3600), status, '         ', obj.eclipsed, sun_alt, -18 < sun_alt < -6)
+
+        if counter > 20 and (visible == True or force_vis == False):
             break
+        counter += 1
     return rise_time, rise_az, max_time, max_alt, set_time, set_az, visible
 
 def calc_obj_from_tle(tle, loc, date):
