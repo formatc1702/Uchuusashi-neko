@@ -11,19 +11,21 @@ tle_name = 'ISS (ZARYA)'
 # tle1 = '1 25544U 98067A   17073.59757234  .00003182  00000-0  55149-4 0  9992'
 # tle2 = '2 25544  51.6435 149.8114 0007006 291.5980 211.5204 15.54208770 47040'
 
-print('Location of {} from {}:'.format(tle_name, loc))
-
+print('TLE for {}:'.format(tle_name))
 tle = spacestuff.get_tle_from_url(tle_src, tle_name)
 
 print(tle[0])
 print(tle[1])
 print(tle[2])
 
+print('')
+
 alt, az = spacestuff.get_alt_az_from_tle(tle, loc)
 alt = round(degrees(alt), 2)
 az  = round(degrees(az),  2)
 heading = spacestuff.compass_heading(az, 16)
 
+print('Location of {} from {}:'.format(tle_name, loc))
 print('Alt: {}\nAz: {} ({})'.format(alt, az, heading))
 
 print('')
@@ -43,5 +45,4 @@ print(rise_time)
 print(max_time)
 print(set_time)
 print('Max Alt: {}'.format(max_alt))
-print('Az: {} -> {}'.format(rise_az, set_az))
-print('Az: {} -> {}'.format(rise_heading, set_heading))
+print('Az: {} -> {} ({} -> {})'.format(rise_az, set_az, rise_heading, set_heading))
