@@ -5,10 +5,13 @@ from math import sqrt
 class Stepper:
     # Using code ported from Adafruit's AccelStepper Fork
     # https://github.com/adafruit/AccelStepper
-    def __init__(self, pin_en, pin_dir, pin_step):
+    def __init__(self, pin_en, pin_dir, pin_step, dps=1.8, microstep=16):
         self.pin_en   = pin_en
         self.pin_dir  = pin_dir
         self.pin_step = pin_step
+
+        self.dps = dps
+        self.microstep = microstep
 
         self.pos = 0
         self.target = 0
@@ -41,11 +44,8 @@ class Stepper:
             self.pin_step.low()
             time.sleep_us(2)
 
-    def turndeg(self, dir, degs):
-        microstep = 16
-        degs_per_step = 1.8
-        numsteps = degs * microstep / degs_per_step
-        self.dostep(dir,numsteps)
+    def deg_to_steps(self, degs):
+        return degs * self.microstep / self.dps
 
     def move_abs(self, target):
         self.target = target

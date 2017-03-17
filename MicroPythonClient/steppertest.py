@@ -13,18 +13,18 @@ steppy.on()
 steppy.max_speed = 10000
 steppy.acc       = 5
 for i in range(0,60):
-    steppy.target    = 1000
+    steppy.target    = steppy.deg_to_steps(360)
     while(steppy.pos != steppy.target):
         _ = steppy.run()
     steppy.off()
     time.sleep(1.0)
-    
+
     steppy.target    = 0
     while(steppy.pos != steppy.target):
         _ = steppy.run()
     steppy.off()
     time.sleep(1.0)
-    
+
 print("Done!")
 
 #pwm = PWM(pin_step)
