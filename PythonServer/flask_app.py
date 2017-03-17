@@ -17,7 +17,7 @@ def alt_az(tle0, tle1, tle2, location):
     alt, az = spacestuff.get_alt_az_from_tle((tle0, tle1, tle2), location)
     alt = round(degrees(alt), 2)
     az  = round(degrees(az),  2)
-    response = 'ALT: {}<br>AZ: {}'.format(alt, az)
+    response = 'ALT: {}\nAZ:  {}\n'.format(alt, az)
     # response = 'LAT:\t{}\nLON:\t{}\nALT:\t{}\nAZ: \t{}\n\nRISE: {}\tAZ:  {}\nMAX:  {}\tALT: {}\nSET:  {}\tAZ:  {}\n'.format(iss.sublat, iss.sublong, iss.alt, iss.az, rtx, ra, mtx, ma, stx, sa)
     return response
 

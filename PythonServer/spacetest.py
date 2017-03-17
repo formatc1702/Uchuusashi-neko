@@ -2,6 +2,8 @@
 import spacestuff
 from math import degrees
 
+# TODO: Set horizon to +10 degrees?
+
 loc      = 'Berlin'
 tle_src  = 'https://www.celestrak.com/NORAD/elements/stations.txt'
 tle_name = 'ISS (ZARYA)'
