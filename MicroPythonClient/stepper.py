@@ -1,5 +1,6 @@
 from machine import Pin
 import utime as time
+from math import sqrt
 
 class Stepper:
     # Using code ported from Adafruit's AccelStepper Fork
@@ -53,16 +54,19 @@ class Stepper:
     def move_rel(self, target):
         self.move_abs(self.pos + target)
 
-    def run_speed(self, now):
+    def run_speed(self):
+        now = time.ticks_ms()
         if now > self.last_steptime + self.step_interval:
-            if self.speed > 0:
-                self.pos += 1
-            elif speed < 0
-                self.pos -= 1
-            self.step(1)
+            if self.speed != 0:
+                if   self.speed > 0:
+                    _dir = 1
+                elif self.speed < 0:
+                    _dir = -1
+                self.pos += _dir
+                self.dostep(_dir)
             self.last_steptime = now
             return True
-        else
+        else:
             return False
 
     def dist_to_go(self):
@@ -73,9 +77,9 @@ class Stepper:
 
     def desired_speed(self):
         togo = self.dist_to_go()
-        if togo > 0
+        if togo > 0:
             required_speed =  sqrt(2.0 *  togo * self.acc)
-        elif togo < 0
+        elif togo < 0:
             required_speed = -sqrt(2.0 * -togo * self.acc)
         else: # togo == 0
             return 0.0
@@ -89,7 +93,7 @@ class Stepper:
         elif required_speed < self.speed:
             if self.speed == 0:
                 required_speed = -sqrt(2.0 * self.acc)
-            else
+            else:
                 required_speed = self.speed - abs(self.acc / self.speed)
             if required_speed < -self.max_speed:
                 required_speed = -self.max_speed
@@ -112,14 +116,15 @@ class Stepper:
 
     def set_speed(self, speed):
         self.speed = speed
-        self.step_interval = abs(1000.0 / speed)
+        if speed != 0:
+            self.step_interval = abs(100.0 / speed)
 
     def run_to_pos(self):
         while(self.run()):
             pass
 
-    def run_speed_to_pos(self, now):
+    def run_speed_to_pos(self):
         if self.target == self.pos:
             return False
         else:
-            self.run_speed(now)
+            self.run_speed()
