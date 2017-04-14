@@ -34,7 +34,7 @@ class Stepper:
 
     def dostep(self, dir, numsteps=1):
         self.on()
-        if dir == 1:
+        if dir == -1:
             self.pin_dir.high()
         else:
             self.pin_dir.low()
@@ -45,7 +45,7 @@ class Stepper:
             time.sleep_us(2)
 
     def deg_to_steps(self, degs):
-        return degs * self.microstep / self.dps
+        return round(degs * self.microstep / self.dps)
 
     def move_abs(self, target):
         self.target = target
