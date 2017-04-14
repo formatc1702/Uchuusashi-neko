@@ -12,17 +12,17 @@ steppy  = Stepper(pin_en, pin_dir, pin_step)
 steppy.on()
 steppy.max_speed = 10000
 steppy.acc       = 5
-for i in range(0,60):
+for i in range(0,1):
     steppy.target    = steppy.deg_to_steps(360)
     while(steppy.pos != steppy.target):
         _ = steppy.run()
-    steppy.off()
+    #steppy.off()
     time.sleep(1.0)
 
     steppy.target    = 0
     while(steppy.pos != steppy.target):
         _ = steppy.run()
-    steppy.off()
+    #steppy.off()
     time.sleep(1.0)
 
 print("Done!")
@@ -38,4 +38,8 @@ print("Done!")
 #    steppy.dostep(1)
 #    time.sleep_us(1)
 #
-steppy.off()
+#steppy.off()
+
+steppy.target    = steppy.deg_to_steps(0)
+while(steppy.pos != steppy.target):
+    _ = steppy.run()

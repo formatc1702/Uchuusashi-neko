@@ -13,14 +13,14 @@ wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 
 wlan.connect(my_ap, my_pw)
-for i in range(0,40): # attempt to connect
+for i in range(0,60): # attempt to connect
     ip,mask,gateway,dns = wlan.ifconfig()
     if ip == '0.0.0.0': #not connected
         print('.')
         time.sleep(1)
     else: #connected!
         print('Got IP: ', ip)
-        tle = spaceclient.get_tle_from_url('https://www.celestrak.com/NORAD/elements/stations.txt','ISS (ZARYA)')
+        tle = spaceclient.get_tle_from_url(spaceclient.tle_src, 'ISS (ZARYA)')
         print(tle)
         spaceclient.get_alt_az_from_tle_and_location(tle, 'Berlin')
         break
