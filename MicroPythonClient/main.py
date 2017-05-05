@@ -1,3 +1,4 @@
+import network
 from machine import Pin, I2C, PWM
 from hmc5883l import HMC5883L
 from stepper import Stepper
@@ -28,10 +29,10 @@ steppy.on()
 steppy.max_speed = 10000
 steppy.acc       = 5
 
-srv_deg(90)
-time.sleep(2)
-srv_deg(0)
-time.sleep(2)
+# srv_deg(90)
+# time.sleep(2)
+# srv_deg(0)
+# time.sleep(2)
 
 # I2C + Compass
 # pin_sda = Pin(12)
